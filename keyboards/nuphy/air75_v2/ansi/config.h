@@ -33,6 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SD1_RX_PIN                          B7
 #define SD1_RX_PAL_MODE                     0
 
-#define EECONFIG_KB_DATA_SIZE             8
+#define EECONFIG_KB_DATA_SIZE               8
 
+#define UNICODE_SELECTED_MODES              UNICODE_MODE_LINUX
+#define UNICODE_CYCLE_PERSIST               false
 

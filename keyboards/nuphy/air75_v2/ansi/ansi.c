@@ -218,6 +218,36 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             f_rgb_test_press = record->event.pressed;
             return false;
 
+        case A_HAT:
+        if (record->event.pressed) {
+            SEND_STRING(SS_RALT("6") "a");
+        }
+        break;
+
+        case E_HAT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_RALT("6") "e");
+            }
+            break;
+
+        case I_HAT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_RALT("6") "i");
+            }
+            break;
+
+        case U_HAT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_RALT("6") "u");
+            }
+            break;
+
+        case O_HAT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_RALT("6") "o");
+            }
+            break;
+
         default:
             return true;
     }
