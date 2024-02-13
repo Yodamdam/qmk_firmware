@@ -42,12 +42,6 @@ enum custom_keycodes {
     BAT_SHOW,
     BAT_NUM,
     RGB_TEST,
-
-    A_HAT,
-    E_HAT,
-    I_HAT,
-    U_HAT,
-    O_HAT
 };
 
 #define SYS_PRT                 G(S(KC_3))

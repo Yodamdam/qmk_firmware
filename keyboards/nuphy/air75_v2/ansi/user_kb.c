@@ -148,9 +148,9 @@ void long_press_key(void) {
 
             if (dev_info.sys_sw_state == SYS_SW_MAC) {
                 default_layer_set(1 << 0);
-                keymap_config.nkro = 0;
+                keymap_config.nkro = 1;
             } else {
-                default_layer_set(1 << 2);
+                default_layer_set(1 << 0);
                 keymap_config.nkro = 1;
             }
         }
@@ -282,13 +282,13 @@ void dial_sw_scan(void) {
             f_sys_show = 1;
             default_layer_set(1 << 0);
             dev_info.sys_sw_state = SYS_SW_MAC;
-            keymap_config.nkro    = 0;
+            keymap_config.nkro    = 1;
             break_all_key();
         }
     } else {
         if (dev_info.sys_sw_state != SYS_SW_WIN) {
             f_sys_show = 1;
-            default_layer_set(1 << 2);
+            default_layer_set(1 << 0);
             dev_info.sys_sw_state = SYS_SW_WIN;
             keymap_config.nkro    = 1;
             break_all_key();
@@ -352,13 +352,13 @@ void dial_sw_fast_scan(void) {
         if (dev_info.sys_sw_state != SYS_SW_MAC) {
             default_layer_set(1 << 0);
             dev_info.sys_sw_state = SYS_SW_MAC;
-            keymap_config.nkro    = 0;
+            keymap_config.nkro    = 1;
             break_all_key();
         }
     } else {
         if (dev_info.sys_sw_state != SYS_SW_WIN) {
             //f_sys_show = 1;
-            default_layer_set(1 << 2);
+            default_layer_set(1 << 0);
             dev_info.sys_sw_state = SYS_SW_WIN;
             keymap_config.nkro    = 1;
             break_all_key();
