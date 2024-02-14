@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
+#include "keymap_us_international_linux.h"
 
 typedef enum {
     TD_NONE,
@@ -40,7 +41,8 @@ enum {
     E_ACCENT,
     I_ACCENT,
     U_ACCENT,
-    O_ACCENT
+    O_ACCENT,
+    CAPS_WORD
 };
 
 void register_hat_key(uint16_t key) {
@@ -76,6 +78,8 @@ void u_finished(tap_dance_state_t *state, void *user_data);
 void u_reset(tap_dance_state_t *state, void *user_data);
 void o_finished(tap_dance_state_t *state, void *user_data);
 void o_reset(tap_dance_state_t *state, void *user_data);
+void caps_finished(tap_dance_state_t *state, void *user_data);
+void capas_reset(tap_dance_state_t *state, void *user_data);
 
 td_state_t cur_dance(tap_dance_state_t *state) {
     if (state->count == 1) {
@@ -281,12 +285,49 @@ void o_reset(tap_dance_state_t *state, void *user_data) {
     otap_state.state = TD_NONE;
 }
 
+// Create an instance of 'td_tap_t' for the 'e' tap dance.
+static td_tap_t caps_tap_state = {
+    .is_press_action = true,
+    .state = TD_NONE
+};
+
+void caps_finished(tap_dance_state_t *state, void *user_data) {
+    caps_tap_state.state = cur_dance(state);
+    switch (caps_tap_state.state) {
+        case TD_SINGLE_TAP:
+            caps_word_toggle();
+            break;
+        case TD_SINGLE_HOLD:
+            layer_on(3);
+            break;
+        case TD_DOUBLE_SINGLE_TAP:
+            caps_word_toggle();
+            break;
+        default: break;
+    }
+}
+
+void caps_reset(tap_dance_state_t *state, void *user_data) {
+    switch (caps_tap_state.state) {
+        case TD_SINGLE_TAP:
+            break;
+        case TD_SINGLE_HOLD:
+            layer_off(3);
+            break;
+        case TD_DOUBLE_SINGLE_TAP:
+            break;
+        default: break;
+    }
+    caps_tap_state.state = TD_NONE;
+}
+
 tap_dance_action_t tap_dance_actions[] = {
     [A_ACCENT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, a_finished, a_reset),
     [E_ACCENT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, e_finished, e_reset),
     [I_ACCENT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, i_finished, i_reset),
     [U_ACCENT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, u_finished, u_reset),
-    [O_ACCENT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, o_finished, o_reset)
+    [O_ACCENT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, o_finished, o_reset),
+    [CAPS_WORD] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, caps_finished, caps_reset),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -296,7 +337,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_ESC,         KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         KC_F12,         KC_PSCR,        KC_INS,         KC_DEL,
     KC_GRV,         KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINS,        KC_EQL,                         KC_BSPC,        KC_PGUP,
     KC_TAB,         KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           KC_LBRC,        KC_RBRC,                        KC_BSLS,        KC_PGDN,
-    CW_TOGG,        KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           LT(2,KC_SCLN),  KC_QUOT,                                        KC_ENT,         KC_HOME,
+    TD(CAPS_WORD),  KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           LT(2,KC_SCLN),  KC_QUOT,                                        KC_ENT,         KC_HOME,
     SC_LSPO,                        KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMM,        KC_DOT,         KC_SLSH,                        SC_RSPC,        KC_UP,          KC_END,
     KC_LCTL,        KC_LGUI,        KC_LALT,                                                        LT(1, KC_SPC),                                                  KC_RALT,        MO(5),          KC_RCTL,        KC_LEFT,        KC_DOWN,        KC_RGHT),
 
@@ -318,13 +359,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,                        _______,        _______,        RALT(KC_C),     _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,        _______,
     _______,        _______,        _______,                                                        _______,                                                        _______,        _______,        _______,        _______,        _______,        _______),
 
+// layer 3
+[3] = LAYOUT_75_ansi(
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,
+    _______,        _______,        LCA(KC_J),      C(KC_D),        C(KC_Y),        XXXXXXX,        XXXXXXX,        LCA(KC_U),      KC_UP,          LCA(KC_B),      XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        _______,
+    _______,        _______,        C(S(KC_N)),     MEH(KC_N),      C(S(KC_F)),     A(KC_J),        KC_HOME,        KC_LEFT,        KC_DOWN,        KC_RGHT,        KC_END,         XXXXXXX,                                        _______,        _______,
+    _______,                        XXXXXXX,        XXXXXXX,        KC_WH_L,        KC_WH_R,        XXXXXXX,        KC_WH_U,        KC_WH_D,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        _______,        _______,
+    _______,        _______,        _______,                                                        _______,                                                        _______,        _______,        _______,        _______,        _______,        _______),
+
 // layer 5
 [5] = LAYOUT_75_ansi(
-    KC_LNUM,        KC_BRID,        KC_BRIU,        KC_WSCH,        KC_FIND,        PB_1,           G(KC_L),        KC_MPRV,        KC_MPLY,        KC_MNXT,        KC_MUTE,        KC_VOLD,        KC_VOLU,        _______,        _______,        _______,
-    _______,        LNK_BLE1,       LNK_BLE2,       LNK_BLE3,       LNK_RF,         _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,
-    _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        DEV_RESET,      SLEEP_MODE,                     BAT_SHOW,       _______,
-    _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                                        _______,        _______,
-    _______,                        _______,        _______,        RGB_TEST,       _______,        BAT_NUM,        _______,        _______,        RGB_SPD,        RGB_SPI,        _______,                        _______,        RGB_VAI,        _______,
+    KC_LNUM,        KC_BRID,        KC_BRIU,        KC_WSCH,        KC_FIND,        PB_1,           G(KC_L),        KC_MPRV,        KC_MPLY,        KC_MNXT,        KC_MUTE,        KC_VOLD,        KC_VOLU,        _______,        SIDE_MOD,        SIDE_HUI,
+    _______,        LNK_BLE1,       LNK_BLE2,       LNK_BLE3,       LNK_RF,         _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        SIDE_SPI,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        DEV_RESET,      SLEEP_MODE,                     BAT_SHOW,       SIDE_SPD,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                                        _______,        SIDE_VAI,
+    _______,                        _______,        _______,        RGB_TEST,       _______,        BAT_NUM,        _______,        _______,        RGB_SPD,        RGB_SPI,        _______,                        _______,        RGB_VAI,        SIDE_VAD,
     _______,        _______,        _______,                                                        _______,                                        _______,        _______,        _______,                        RGB_MOD,        RGB_VAD,        RGB_HUI)
 //// layer X
 // [X] = LAYOUT_75_ansi(
