@@ -40,4 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define TAPPING_TERM                        200
 #define AUTO_SHIFT_TIMEOUT                  200
-#define NO_AUTO_SHIFT_SPECIAL
+#define NO_AUTO_SHIFT_TAB
+#define AUTO_SHIFT_MODIFIERS
+#define AUTO_SHIFT_REPEAT
