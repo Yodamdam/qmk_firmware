@@ -330,6 +330,15 @@ tap_dance_action_t tap_dance_actions[] = {
     [CAPS_WORD] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, caps_finished, caps_reset),
 };
 
+uint16_t get_autoshift_timeout(uint16_t keycode, keyrecord_t *record) {
+    switch(keycode) {
+        case KC_SPACE:
+            return 2 * get_generic_autoshift_timeout();
+        default:
+            return get_generic_autoshift_timeout();
+    }
+}
+
 bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
     switch(keycode) {
         case KC_LEFT:
@@ -375,9 +384,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [0] = LAYOUT_75_ansi(
     KC_ESC,             KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         KC_F12,         KC_PSCR,        KC_INS,         KC_DEL,
     KC_GRV,             KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINS,        KC_EQL,                         KC_BSPC,        KC_PGUP,
-    KC_TAB,             KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           KC_LBRC,        KC_RBRC,                        KC_BSLS,        KC_PGDN,
-    TD(CAPS_WORD),      KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           LT(2,KC_SCLN),  KC_QUOT,                                        KC_ENT,         KC_HOME,
-    SC_LSPO,                            KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMM,        KC_DOT,         KC_SLSH,                        SC_RSPC,        KC_UP,          KC_END,
+    KC_TAB,             KC_Q,           KC_D,           KC_T,           KC_R,           KC_W,           KC_Y,           KC_P,           KC_U,           KC_L,           LT(2,KC_SCLN),  KC_LBRC,        KC_RBRC,                        KC_BSLS,        KC_PGDN,
+    TD(CAPS_WORD),      KC_A,           KC_S,           KC_E,           KC_F,           KC_G,           KC_H,           KC_J,           KC_I,           KC_O,           KC_N,           KC_QUOT,                                        KC_ENT,         KC_HOME,
+    SC_LSPO,                            KC_Z,           KC_X,           KC_C,           KC_V,           KC_K,           KC_B,           KC_M,           KC_COMM,        KC_DOT,         KC_SLSH,                        SC_RSPC,        KC_UP,          KC_END,
     KC_LCTL,            KC_LGUI,        KC_LALT,                                                        LT(1, KC_SPC),                                                  KC_RALT,        MO(5),          KC_RCTL,        KC_LEFT,        KC_DOWN,        KC_RGHT),
 
 // layer 1
@@ -393,8 +402,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [2] = LAYOUT_75_ansi(
     UC_NEXT,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,
     _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,
-    _______,            _______,        _______,        TD(E_ACCENT),   _______,        _______,        _______,        TD(U_ACCENT),   TD(I_ACCENT),   TD(O_ACCENT),   _______,        _______,        _______,                        _______,        _______,
-    _______,            TD(A_ACCENT),   _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                                        _______,        _______,
+    _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        TD(U_ACCENT),   _______,        _______,        _______,        _______,                        _______,        _______,
+    _______,            TD(A_ACCENT),   _______,        TD(E_ACCENT),   _______,        _______,        _______,        _______,        TD(I_ACCENT),   TD(O_ACCENT),   _______,        _______,                                        _______,        _______,
     _______,                            _______,        _______,        RALT(KC_C),     _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,        _______,
     _______,            _______,        _______,                                                        _______,                                                        _______,        _______,        _______,        _______,        _______,        _______),
 
@@ -403,7 +412,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,
     _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,
     MT(MOD_LCTL,KC_TAB),_______,        LCA(KC_J),      C(KC_D),        C(KC_Y),        A(KC_INS),      XXXXXXX,        XXXXXXX,        KC_UP,          XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        _______,
-    _______,            _______,        C(KC_N),        MEH(KC_N),      C(KC_F),        A(KC_J),        KC_HOME,        KC_LEFT,        KC_DOWN,        KC_RGHT,        KC_END,         XXXXXXX,                                        _______,        _______,
+    _______,            _______,        C(S(KC_N)),     MEH(KC_N),      C(S(KC_F)),     A(KC_J),        KC_HOME,        KC_LEFT,        KC_DOWN,        KC_RGHT,        KC_END,         XXXXXXX,                                        _______,        _______,
     _______,                            LCA(KC_U),      LCA(KC_B),      KC_WH_L,        KC_WH_R,        XXXXXXX,        KC_WH_U,        KC_WH_D,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        _______,        _______,
     _______,            _______,        _______,                                                        _______,                                                        _______,        _______,        _______,        _______,        _______,        _______),
 
