@@ -147,7 +147,7 @@ void long_press_key(void) {
             device_reset_init();
 
             if (dev_info.sys_sw_state == SYS_SW_MAC) {
-                default_layer_set(1 << 0);
+                default_layer_set(1 << 7);
                 keymap_config.nkro = 1;
             } else {
                 default_layer_set(1 << 0);
@@ -280,7 +280,7 @@ void dial_sw_scan(void) {
     if (dial_scan & 0x02) {
         if (dev_info.sys_sw_state != SYS_SW_MAC) {
             f_sys_show = 1;
-            default_layer_set(1 << 0);
+            default_layer_set(1 << 7);
             dev_info.sys_sw_state = SYS_SW_MAC;
             keymap_config.nkro    = 1;
             break_all_key();
@@ -350,7 +350,7 @@ void dial_sw_fast_scan(void) {
     // Win or Mac
     if (dial_scan_sys) {
         if (dev_info.sys_sw_state != SYS_SW_MAC) {
-            default_layer_set(1 << 0);
+            default_layer_set(1 << 7);
             dev_info.sys_sw_state = SYS_SW_MAC;
             keymap_config.nkro    = 1;
             break_all_key();
