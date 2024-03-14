@@ -41,6 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_TERM                        200
 #define TAPPING_TERM_PER_KEY
 #define AUTO_SHIFT_TIMEOUT                  200
+#define CAPS_WORD_INVERT_ON_SHIFT
+#define CAPS_WORD_IDLE_TIMEOUT              2000
 // #define AUTO_SHIFT_TIMEOUT_PER_KEY
 #define NO_AUTO_SHIFT_TAB
 #define AUTO_SHIFT_MODIFIERS

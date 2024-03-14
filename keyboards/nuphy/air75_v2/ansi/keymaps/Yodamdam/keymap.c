@@ -334,6 +334,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LT(1, KC_SPC):
             return TAPPING_TERM * 3;
+        case TD(CAPS_WORD):
+            return TAPPING_TERM * 0.75;
         default:
             return TAPPING_TERM;
     }
@@ -389,7 +391,7 @@ bool get_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM toggle_game_mode[] = {KC_LCTL, KC_LEFT, KC_RGHT, COMBO_END};
 const uint16_t PROGMEM toggle_auto_shift[] = {KC_LCTL, KC_UP, KC_DOWN, COMBO_END};
 combo_t key_combos[] = {
-    COMBO(toggle_game_mode, TG(6)),
+    COMBO(toggle_game_mode, TG(4)),
     COMBO(toggle_auto_shift, AS_TOGG),
 };
 
@@ -402,21 +404,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,             KC_Q,           KC_D,           KC_T,           KC_R,           KC_W,           KC_Y,           KC_P,           KC_U,           KC_L,           KC_SCLN,        KC_LBRC,        KC_RBRC,                        KC_BSLS,        KC_PGDN,
     TD(CAPS_WORD),      KC_A,           KC_S,           KC_E,           KC_F,           KC_G,           KC_H,           KC_J,           KC_I,           KC_O,           KC_N,           KC_QUOT,                                        KC_ENT,         KC_HOME,
     SC_LSPO,                            KC_Z,           KC_X,           KC_C,           KC_V,           KC_K,           KC_B,           KC_M,           KC_COMM,        KC_DOT,         KC_SLSH,                        SC_RSPC,        KC_UP,          KC_END,
-    KC_LCTL,            KC_LGUI,        KC_LALT,                                                        LT(1, KC_SPC),                                                  MO(2),          MO(5),          KC_RCTL,        KC_LEFT,        KC_DOWN,        KC_RGHT),
+    KC_LCTL,            KC_LGUI,        KC_LALT,                                                        LT(1, KC_SPC),                                                  MO(2),          MO(6),          KC_RCTL,        KC_LEFT,        KC_DOWN,        KC_RGHT),
 
 // layer 1
 [1] = LAYOUT_75_ansi(
     _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,
     _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,
     _______,            S(KC_7),        S(KC_BSLS),     S(KC_LBRC),     S(KC_RBRC),     XXXXXXX,        KC_PAST,        KC_7,           KC_8,           KC_9,           KC_COMM,        XXXXXXX,        XXXXXXX,                        _______,        _______,
-    _______,            S(KC_COMM),     S(KC_DOT),      S(KC_9),        S(KC_0),        XXXXXXX,        KC_PMNS,        KC_4,           KC_5,           KC_6,           KC_0,           KC_PEQL,                                        _______,        _______,
-    _______,                            XXXXXXX,        KC_LBRC,        KC_RBRC,        KC_PSLS,        KC_PPLS,        KC_1,           KC_1,           KC_2,           KC_3,           KC_DOT,                         _______,        _______,        _______,
+    _______,            S(KC_COMM),     S(KC_DOT),      S(KC_9),        S(KC_0),        KC_MINS,        KC_PMNS,        KC_4,           KC_5,           KC_6,           KC_0,           KC_EQL,                                         _______,        _______,
+    _______,                            XXXXXXX,        KC_LBRC,        KC_RBRC,        XXXXXXX,        KC_PSLS,        KC_PPLS,        KC_1,           KC_2,           KC_3,           KC_DOT,                         _______,        _______,        _______,
     _______,            _______,        _______,                                                        _______,                                                        _______,        _______,        _______,        _______,        _______,        _______),
 
 // layer 2
 [2] = LAYOUT_75_ansi(
-    UC_NEXT,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,
-    _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,
+    _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,
+    _______,            _______,        _______,        _______,        RALT(KC_5),     _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,
     _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        TD(U_ACCENT),   _______,        _______,        _______,        _______,                        _______,        _______,
     _______,            TD(A_ACCENT),   _______,        TD(E_ACCENT),   _______,        _______,        _______,        _______,        TD(I_ACCENT),   TD(O_ACCENT),   _______,        _______,                                        _______,        _______,
     _______,                            _______,        _______,        RALT(KC_C),     _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,        _______,
@@ -431,31 +433,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,                            LCA(KC_U),      LCA(KC_B),      KC_WH_L,        KC_WH_R,        XXXXXXX,        KC_WH_U,        KC_WH_D,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        _______,        _______,
     _______,            _______,        _______,                                                        _______,                                                        _______,        _______,        _______,        _______,        _______,        _______),
 
-// layer 5
-[5] = LAYOUT_75_ansi(
-    KC_LNUM,            KC_BRID,        KC_BRIU,        KC_WSCH,        KC_FIND,        PB_1,           G(KC_L),        KC_MPRV,        KC_MPLY,        KC_MNXT,        KC_MUTE,        KC_VOLD,        KC_VOLU,        _______,        SIDE_MOD,       SIDE_HUI,
-    _______,            LNK_BLE1,       LNK_BLE2,       LNK_BLE3,       LNK_RF,         _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        SIDE_SPI,
-    _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        DEV_RESET,      SLEEP_MODE,                     BAT_SHOW,       SIDE_SPD,
-    _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                                        _______,        SIDE_VAI,
-    _______,                            _______,        _______,        RGB_TEST,       _______,        BAT_NUM,        _______,        _______,        RGB_SPD,        RGB_SPI,        _______,                        _______,        RGB_VAI,        SIDE_VAD,
-    _______,            _______,        _______,                                                        _______,                                        _______,        _______,        _______,                        RGB_MOD,        RGB_VAD,        RGB_HUI),
-// layer 6
-[6] = LAYOUT_75_ansi(
+// layer 4
+[4] = LAYOUT_75_ansi(
     KC_ESC,             KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         KC_F12,         KC_PSCR,        KC_INS,         KC_DEL,
     KC_GRV,             KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINS,        KC_EQL,                         KC_BSPC,        KC_PGUP,
     KC_TAB,             KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           KC_LBRC,        KC_RBRC,                        KC_BSLS,        KC_PGDN,
     KC_CAPS,            KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           KC_H,           KC_J,           KC_K,           KC_L,           KC_SCLN,        KC_QUOT,                                        KC_ENT,         KC_HOME,
     KC_LSFT,                            KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,           KC_N,           KC_M,           KC_COMM,        KC_DOT,         KC_SLSH,                        KC_RSFT,        KC_UP,          KC_END,
-    KC_LCTL,            KC_LGUI,        KC_LALT,                                                        KC_SPC,                                                         KC_RALT,        MO(5),          KC_RCTL,        KC_LEFT,        KC_DOWN,        KC_RGHT),
+    KC_LCTL,            KC_LGUI,        KC_LALT,                                                        KC_SPC,                                                         KC_RALT,        MO(6),          KC_RCTL,        KC_LEFT,        KC_DOWN,        KC_RGHT),
 
-// layer 7
-[7] = LAYOUT_75_ansi(
+// layer 5
+[5] = LAYOUT_75_ansi(
     KC_ESC,             KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         KC_F12,         KC_PSCR,        KC_INS,         KC_DEL,
     KC_GRV,             KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINS,        KC_EQL,                         KC_BSPC,        KC_PGUP,
     KC_TAB,             KC_Q,           KC_D,           KC_T,           KC_R,           KC_W,           KC_Y,           KC_P,           KC_U,           KC_L,           KC_SCLN,        KC_LBRC,        KC_RBRC,                        KC_BSLS,        KC_PGDN,
     KC_CAPS,            KC_A,           KC_S,           KC_E,           KC_F,           KC_G,           KC_H,           KC_J,           KC_I,           KC_O,           KC_N,           KC_QUOT,                                        KC_ENT,         KC_HOME,
     KC_LSFT,                            KC_Z,           KC_X,           KC_C,           KC_V,           KC_K,           KC_B,           KC_M,           KC_COMM,        KC_DOT,         KC_SLSH,                        KC_RSFT,        KC_UP,          KC_END,
-    KC_LCTL,            KC_LGUI,        KC_LALT,                                                        KC_SPC,                                                         KC_RALT,        MO(5),          KC_RCTL,        KC_LEFT,        KC_DOWN,        KC_RGHT)
+    KC_LCTL,            KC_LGUI,        KC_LALT,                                                        KC_SPC,                                                         KC_RALT,        MO(6),          KC_RCTL,        KC_LEFT,        KC_DOWN,        KC_RGHT),
+
+
+// layer 6
+[6] = LAYOUT_75_ansi(
+    KC_LNUM,            KC_BRID,        KC_BRIU,        KC_WSCH,        KC_FIND,        PB_1,           G(KC_L),        KC_MPRV,        KC_MPLY,        KC_MNXT,        KC_MUTE,        KC_VOLD,        KC_VOLU,        _______,        SIDE_MOD,       SIDE_HUI,
+    _______,            LNK_BLE1,       LNK_BLE2,       LNK_BLE3,       LNK_RF,         _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        SIDE_SPI,
+    _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        DEV_RESET,      SLEEP_MODE,                     BAT_SHOW,       SIDE_SPD,
+    _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                                        _______,        SIDE_VAI,
+    _______,                            _______,        _______,        RGB_TEST,       _______,        BAT_NUM,        _______,        _______,        RGB_SPD,        RGB_SPI,        _______,                        _______,        RGB_VAI,        SIDE_VAD,
+    _______,            _______,        _______,                                                        _______,                                        _______,        _______,        _______,                        RGB_MOD,        RGB_VAD,        RGB_HUI)
 
 //// layer X
 // [X] = LAYOUT_75_ansi(
