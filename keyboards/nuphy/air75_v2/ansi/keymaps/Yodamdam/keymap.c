@@ -411,8 +411,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,
     _______,            _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,        _______,                        _______,        _______,
     _______,            S(KC_7),        S(KC_BSLS),     S(KC_LBRC),     S(KC_RBRC),     XXXXXXX,        KC_PAST,        KC_7,           KC_8,           KC_9,           KC_COMM,        XXXXXXX,        XXXXXXX,                        _______,        _______,
-    _______,            S(KC_COMM),     S(KC_DOT),      S(KC_9),        S(KC_0),        KC_MINS,        KC_PMNS,        KC_4,           KC_5,           KC_6,           KC_0,           KC_EQL,                                         _______,        _______,
-    _______,                            XXXXXXX,        KC_LBRC,        KC_RBRC,        XXXXXXX,        KC_PSLS,        KC_PPLS,        KC_1,           KC_2,           KC_3,           KC_DOT,                         _______,        _______,        _______,
+    _______,            S(KC_COMM),     S(KC_DOT),      S(KC_9),        S(KC_0),        S(KC_MINS),     KC_PMNS,        KC_4,           KC_5,           KC_6,           KC_0,           KC_EQL,                                         _______,        _______,
+    _______,                            XXXXXXX,        KC_LBRC,        KC_RBRC,        XXXXXXX,        XXXXXXX,        KC_PPLS,        KC_1,           KC_2,           KC_3,           KC_DOT,                         _______,        _______,        _______,
     _______,            _______,        _______,                                                        _______,                                                        _______,        _______,        _______,        _______,        _______,        _______),
 
 // layer 2
