@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "user_kb.h"
+#include "kb_util.h"
 #include "ansi.h"
 #include "side_table.h"
 #include "ws2812.h"
@@ -78,7 +78,7 @@ const uint8_t side_led_index_tab[SIDE_LINE][2] = {
 };
 
 extern DEV_INFO_STRUCT dev_info;
-extern user_config_t   user_config;
+extern kb_config_t     kb_config;
 extern uint8_t         rf_blink_cnt;
 extern uint16_t        rf_link_show_time;
 extern bool            f_bat_hold;
@@ -89,7 +89,7 @@ void side_ws2812_setleds(rgb_led_t *ledarray, uint16_t leds);
 void rgb_matrix_update_pwm_buffers(void);
 
 /**
- * @brief  side leds set color vaule.
+     * @brief  side leds set color value.
  * @param  index: index of side_leds[].
  * @param  ...
  */
@@ -111,7 +111,7 @@ void side_rgb_refresh(void) {
  * @param  dir: 0 - decrease, 1 - increase.
  * @note  save to eeprom.
  */
-void side_light_contol(uint8_t dir) {
+void side_light_control(uint8_t dir) {
     if (dir) {
         if (side_light > SIDE_BRIGHT_MAX) {
             return;
@@ -123,8 +123,8 @@ void side_light_contol(uint8_t dir) {
         } else
             side_light--;
     }
-    user_config.ee_side_light = side_light;
-    eeconfig_update_kb_datablock(&user_config);
+    kb_config.ee_side_light = side_light;
+    eeconfig_update_kb_datablock(&kb_config);
 }
 
 /**
@@ -132,7 +132,7 @@ void side_light_contol(uint8_t dir) {
  * @param  dir: 0 - decrease, 1 - increase.
  * @note  save to eeprom.
  */
-void side_speed_contol(uint8_t dir) {
+void side_speed_control(uint8_t dir) {
     if ((side_speed) > SIDE_SPEED_MAX) (side_speed) = SIDE_SPEED_MAX / 2;
 
     if (dir) {
@@ -140,8 +140,8 @@ void side_speed_contol(uint8_t dir) {
     } else {
         if ((side_speed) < SIDE_SPEED_MAX) side_speed++;
     }
-    user_config.ee_side_speed = side_speed;
-    eeconfig_update_kb_datablock(&user_config);
+    kb_config.ee_side_speed = side_speed;
+    eeconfig_update_kb_datablock(&kb_config);
 }
 
 /**
@@ -179,9 +179,9 @@ void side_colour_control(uint8_t dir) {
             }
         }
     }
-    user_config.ee_side_rgb    = side_rgb;
-    user_config.ee_side_colour = side_colour;
-    eeconfig_update_kb_datablock(&user_config);
+    kb_config.ee_side_rgb    = side_rgb;
+    kb_config.ee_side_colour = side_colour;
+    eeconfig_update_kb_datablock(&kb_config);
 }
 
 /**
@@ -203,8 +203,8 @@ void side_mode_control(uint8_t dir) {
         }
     }
     side_play_point          = 0;
-    user_config.ee_side_mode = side_mode;
-    eeconfig_update_kb_datablock(&user_config);
+    kb_config.ee_side_mode = side_mode;
+    eeconfig_update_kb_datablock(&kb_config);
 }
 
 /**
@@ -273,7 +273,7 @@ void sleep_sw_led_show(void) {
     }
 
     if (sleep_show_flag) {
-        if (user_config.sleep_enable) {
+        if (kb_config.sleep_enable) {
             r_temp = 0x00;
             g_temp = 0x80;
             b_temp = 0x00;
@@ -588,7 +588,7 @@ void bat_num_led(uint8_t bat_percent)
 void num_led_show(void)
 {
     static uint8_t num_bat_temp         = 0;
-    num_bat_temp         = dev_info.rf_baterry;
+    num_bat_temp         = dev_info.rf_battery;
     bat_num_led(num_bat_temp);
 }
 
@@ -659,7 +659,7 @@ void bat_led_show(void) {
         f_init        = 0;
         bat_show_time = timer_read32();
         charge_state  = dev_info.rf_charge;
-        bat_percent   = dev_info.rf_baterry;
+        bat_percent   = dev_info.rf_battery;
     }
 
     if (charge_state != dev_info.rf_charge) {
@@ -680,13 +680,13 @@ void bat_led_show(void) {
         if (charge_state == 0x03) {
             bat_show_breath = true;
         } else if (charge_state & 0x01) {
-            dev_info.rf_baterry = 100;
+            dev_info.rf_battery = 100;
         }
     }
 
-    if (bat_percent != dev_info.rf_baterry) {
+    if (bat_percent != dev_info.rf_battery) {
         if (timer_elapsed32(bat_per_debounce) > 1000) {
-            bat_percent = dev_info.rf_baterry;
+            bat_percent = dev_info.rf_battery;
         }
     } else {
         bat_per_debounce = timer_read32();
@@ -718,11 +718,11 @@ void bat_led_show(void) {
  */
 void device_reset_show(void) {
 
-    writePinHigh(DC_BOOST_PIN);
-    setPinOutput(DRIVER_SIDE_CS_PIN);
-    setPinOutput(DRIVER_LED_CS_PIN);
-    writePinLow(DRIVER_SIDE_CS_PIN);
-    writePinLow(DRIVER_LED_CS_PIN);
+    gpio_write_pin_high(DC_BOOST_PIN);
+    gpio_set_pin_output_push_pull(DRIVER_SIDE_CS_PIN);
+    gpio_set_pin_output_push_pull(DRIVER_LED_CS_PIN);
+    gpio_write_pin_low(DRIVER_SIDE_CS_PIN);
+    gpio_write_pin_low(DRIVER_LED_CS_PIN);
 
     for (int blink_cnt = 0; blink_cnt < 3; blink_cnt++) {
         rgb_matrix_set_color_all(0x10, 0x10, 0x10);
@@ -762,14 +762,14 @@ void device_reset_init(void) {
     rgb_matrix_set_speed(255 - RGB_MATRIX_SPD_STEP * 2);
     rgb_matrix_sethsv(255, 255, RGB_MATRIX_MAXIMUM_BRIGHTNESS - RGB_MATRIX_VAL_STEP * 2);
 
-    user_config.default_brightness_flag = 0xA5;
-    user_config.ee_side_mode            = side_mode;
-    user_config.ee_side_light           = side_light;
-    user_config.ee_side_speed           = side_speed;
-    user_config.ee_side_rgb             = side_rgb;
-    user_config.ee_side_colour          = side_colour;
-    user_config.sleep_enable            = true;
-    eeconfig_update_kb_datablock(&user_config);
+    kb_config.default_brightness_flag = 0xA5;
+    kb_config.ee_side_mode            = side_mode;
+    kb_config.ee_side_light           = side_light;
+    kb_config.ee_side_speed           = side_speed;
+    kb_config.ee_side_rgb             = side_rgb;
+    kb_config.ee_side_colour          = side_colour;
+    kb_config.sleep_enable            = true;
+    eeconfig_update_kb_datablock(&kb_config);
 }
 
 /**
@@ -778,11 +778,11 @@ void device_reset_init(void) {
 void rgb_test_show(void)
 {
     // open power control
-    writePinHigh(DC_BOOST_PIN);
-    setPinOutput(DRIVER_LED_CS_PIN);
-    writePinLow(DRIVER_LED_CS_PIN);
-    setPinOutput(DRIVER_SIDE_CS_PIN);
-    writePinLow(DRIVER_SIDE_CS_PIN);
+    gpio_write_pin_high(DC_BOOST_PIN);
+    gpio_set_pin_output_push_pull(DRIVER_LED_CS_PIN);
+    gpio_write_pin_low(DRIVER_LED_CS_PIN);
+    gpio_set_pin_output_push_pull(DRIVER_SIDE_CS_PIN);
+    gpio_write_pin_low(DRIVER_SIDE_CS_PIN);
 
     // set test color
     rgb_matrix_set_color_all(0xFF, 0x00, 0x00);

@@ -1,11 +1,11 @@
-c# NuPhy Air75 V2
+# NuPhy Air75 V2
 
 *NuPhy Air75 V2 is a standard 84 key keyboard.*
-![NuPhy Air75 V2](https://imgur.com/R7jS2JC)
+![NuPhy Air75 V2](https://i.imgur.com/R7jS2JC.jpeg)
 
 * Keyboard Maintainer: [nuphy](https://github.com/nuphy-src)
 * Hardware Supported: NuPhy Air75 V2 PCB
-* Hardware Availability: Private
+* Hardware Availability: [link](https://nuphy.com/products/air75-v2)
 
 Make example for this keyboard (after setting up your build environment):
 
@@ -22,3 +22,4 @@ See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_to
 Enter the bootloader in one way:
 
 * **Bootmagic reset**: Hold down the key at (0,0) in the matrix (usually the top left key or Escape) and plug in the keyboard
+* **Keycode in layout**: Press the key mapped to `QK_BOOT` if it is available
